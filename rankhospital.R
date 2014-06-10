@@ -28,15 +28,14 @@ rankhospital <- function(state, outcome, num = "best") {
 
     ## get subset we concerned
     subdata <- subset(hospitaldata, State == state, select=c(2,index))
+    names(subdata) <- c("name","outcome")
     
     ## remove na
     good <- complete.cases(subdata[,2])
     subdata <- subdata[good,]
     
-    ## sort dat???????
-    x <- subdata[,1]
-    y <- subdata[,2]
-    orderdata <- subdata[order(y,x),]
+    ## sort dat
+    orderdata <- subdata[order(subdata$outcome,subdata$name),]
     
     ## get name
     if (num == "best"){
@@ -44,7 +43,7 @@ rankhospital <- function(state, outcome, num = "best") {
     }else if(num == "worst"){
         name <- orderdata[dim(orderdata)[1],1]
     }else if (num < dim(orderdata)[1] & num > 0){
-        name <- orderdata[1:num, 1]
+        name <- orderdata[num, 1]
     }else{
         name <- NA
     }
